@@ -3,7 +3,7 @@ const Hapi = require('hapi');
 const server = new Hapi.Server();
 server.connection({ 
     port: process.env.PORT || 8080, 
-    host: process.env.HOST 'localhost' 
+    host: process.env.HOST || 'localhost' 
 });
 
 var rubrica = [{ nome: "pippo", professione: "cane" }, { nome: "topolino", professione: "topo" }];
