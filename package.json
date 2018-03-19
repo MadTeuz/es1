@@ -1,14 +1,13 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
+  "name": "esercizio2",
+  "version": "0.0.0",
+  "description": "Esercizio2",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": {
+    "name": "M_INF3.Quinta"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "hapi": "^16.6.2"
+    "hapi": "^16.6.2",
+    "hapi-auth-basic": "^4.2.0"
   }
 }

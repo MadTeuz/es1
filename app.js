@@ -1,29 +1,55 @@
-'use strict'
+'use strict';
 const Hapi = require('hapi');
+const Basic = require('hapi-auth-basic');
+
 const server = new Hapi.Server();
-server.connection({ 
-    port: process.env.PORT || 8080, 
-    host: process.env.HOST || 'localhost' 
+
+server.connection({ port: 3000, host: 'localhost' });
+
+const users = {
+    john: {
+        username: 'john',
+        password: 'secret',
+        name: 'John Doe',
+        id: '11211sd'
+    },
+    paul: {
+        username: 'paul',
+        password: '1234',
+        name: 'Paul Newmam',
+        id: '234d'
+    }
+};
+
+const validate = function(request, username, password, callback){
+    const user = users[username];
+
+    if(!user)
+        return callback(null, false);
+    else if (user.password == password)
+        return callback(null, true, {id: user.id, name: user.name});
+};
+
+server.register(Basic, function (err) {
+    if (err)
+        throw err;
 });
 
-var rubrica = [{ nome: "pippo", professione: "cane" }, { nome: "topolino", professione: "topo" }];
-rubrica.push({ nome: "pluto", professione: "cane" });
-console.log("Array Iniziale");
-console.log(rubrica);
+server.auth.strategy('simple', 'basic', { validateFunc: validate });
 
 server.route({
-    method: 'PUT',
-    path: '/api/items/{id}',
-    handler: function (request, reply) {
-        console.log("Modifico elemento nella posizione " + request.params.id);
-        console.log("Modifico elemento %O", rubrica[request.params.id]);
-        rubrica[request.params.id].nome = encodeURIComponent(request.query.nome);
-        rubrica[request.params.id].professione = encodeURIComponent(request.query.professione);
-        console.log("Array Modificato :");
-        console.log(rubrica);
-        reply(JSON.stringify(rubrica));
+    method: 'GET',
+    path: '/',
+    config:{
+        auth: 'simple',
+        handler: function (request, reply) {
+            reply('Hello, ' + request.auth.credentials.name);
+        }
     }
 });
-server.start(function () {
-    console.log('Hapi is listening to http://localhost:8080');
+
+server.start(function (err) {
+    if (err)
+        throw err;
+    console.log("server started");
 });
