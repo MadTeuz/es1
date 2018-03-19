@@ -4,7 +4,10 @@ const Basic = require('hapi-auth-basic');
 
 const server = new Hapi.Server();
 
-server.connection({ port: 3000, host: 'localhost' });
+server.connection({ 
+    port: process.env.PORT || 8080, 
+    host: process.env.HOST|| 'localhost' 
+});
 
 const users = {
     john: {
